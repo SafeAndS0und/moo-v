@@ -11,16 +11,17 @@
       </main>
     </transition>
 
-
+    <Foot/>
   </div>
 </template>
 
 <script>
   import Welcome from '../components/Welcome.vue'
   import Search from '../components/main/Search.vue'
+  import Foot from '../components/Foot'
 
   export default {
-    components: {Welcome, Search},
+    components: {Welcome, Search, Foot},
     created(){
       setTimeout(() => this.websiteLanuched = true, 500)
     },

@@ -6,11 +6,9 @@
 
     <transition name="fade">
       <div class="results" v-if="searchingFor.length > 0">
-        <h3>Results for {{searchingFor}}: </h3>
+        <h2>Results for {{searchingFor}}: </h2>
         <p class="no-results" v-if="results.length === 0 ">Sorry, we don't know that title</p>
-        <article v-for="movie of results">
-          {{movie.title}}
-        </article>
+        <search-carousel class="carousel" :movies="results"/>
       </div>
     </transition>
 
@@ -19,10 +17,11 @@
 
 <script>
   import CustomInput from '../partials/CustomInput.vue'
+  import SearchCarousel from './SearchCarousel.vue'
 
   export default {
     name: "Search",
-    components: {CustomInput},
+    components: {CustomInput, SearchCarousel},
     data(){
       return {
         searchingFor: '',
