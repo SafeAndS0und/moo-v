@@ -19,6 +19,7 @@
     name: "Welcome",
     methods: {
       exitWelcomeScreen(){
+        this.$emit('exit')
         this.$store.commit('turnOffWelcoming')
       }
     }

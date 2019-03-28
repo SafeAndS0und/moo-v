@@ -18,6 +18,10 @@ export default {
     ]
   },
 
+  env: {
+    APIKEY: "5043e8dec3412f7eb9836510b197a5fb"
+  },
+
   /*
   ** Customize the progress-bar color
   */
@@ -58,6 +62,9 @@ export default {
     ** You can extend webpack config here
     */
     extend(config, ctx) {
+      config.node = {
+        fs: 'empty'
+      }
     }
   }
 }

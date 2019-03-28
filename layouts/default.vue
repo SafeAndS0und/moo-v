@@ -6,6 +6,7 @@
 
 <style lang="scss">
 
+
   @import '../assets/css/variables.scss';
   @import url('https://fonts.googleapis.com/css?family=Titillium+Web:300,400,700');
 
