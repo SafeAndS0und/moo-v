@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nuxt/>
+    <nuxt keep-alive/>
   </div>
 </template>
 
@@ -23,11 +23,12 @@
   *,
   *:before,
   *:after {
-    font-family:  'Titillium Web', sans-serif;
+    font-family: 'Titillium Web', sans-serif;
     box-sizing: border-box;
     margin: 0;
   }
-  body{
+
+  body {
     background-color: $websiteBackground;
     color: white;
   }

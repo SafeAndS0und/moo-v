@@ -1,13 +1,15 @@
 <template>
   <section>
 
-    <h1>Search for a Movie or TV series</h1>
+    <h1>Search for a {{forWhat === 'movie' ? "Movie" : "TV Show"}}</h1>
     <CustomInput v-model="searchingFor" @keypress.enter.native="searchByTitle"/>
 
     <transition name="fade">
       <div class="results" v-if="searchingFor.length > 0">
-        <h2>Results for {{searchingFor}}: </h2>
-        <p class="no-results" v-if="results.length === 0 ">Sorry, we don't know that title</p>
+        <h2>Results for "{{searchingFor}}"</h2>
+        <p class="no-results" v-if="results.length === 0 && alreadySearched ">
+          Sorry, we don't know that title
+        </p>
         <search-carousel class="carousel" :movies="results"/>
       </div>
     </transition>
@@ -22,17 +24,20 @@
   export default {
     name: "Search",
     components: {CustomInput, SearchCarousel},
+    props: ['forWhat'],
     data(){
       return {
         searchingFor: '',
-        results: []
+        results: [],
+        alreadySearched: false
       }
     },
     methods: {
       searchByTitle(){
 
-        this.$axios.$get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.APIKEY}&query=${this.searchingFor}`)
+        this.$axios.$get(`https://api.themoviedb.org/3/search/${this.forWhat}?api_key=${process.env.APIKEY}&query=${this.searchingFor}`)
           .then(res => {
+            this.alreadySearched = true
             console.log(res.results)
             this.results = res.results
           })
@@ -45,7 +50,7 @@
 
   section {
     border-bottom: 1px solid #2a2a2a;
-    padding-bottom: 40px;
+    padding: 30px 0;
 
     h1 {
       text-align: center;
