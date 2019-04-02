@@ -1,7 +1,7 @@
 <template>
 
   <transition-group name="fadeUp" tag="div">
-    <article v-for="movie of tenMovies" :key="movie.id" @click="$router.push('/' + movie.id)">
+    <article v-for="movie of tenMovies" :key="movie.id" @click="showMovie(movie)">
 
       <img :src='"https://image.tmdb.org/t/p/w200/" + movie.poster_path' alt="Poster">
       <h3>{{movie.title || movie.name}}</h3>
@@ -19,6 +19,12 @@
       tenMovies(){
         console.log(this.movies)
         return this.movies.slice(0, 12)
+      }
+    },
+    methods: {
+      showMovie(movie){
+        this.$store.commit('changeShowType', movie.title ? 'movie' : 'tv')
+        this.$router.push('/' + movie.id)
       }
     }
   }

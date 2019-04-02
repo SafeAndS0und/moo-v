@@ -34,7 +34,8 @@
   export default {
     name: "index",
     asyncData(context){
-      return context.app.$axios.$get(`https://api.themoviedb.org/3/tv/${context.params.movie}?api_key=${process.env.APIKEY}`)
+      return context.app.$axios.$get(
+        `https://api.themoviedb.org/3/${context.store.state.showType}/${context.params.movie}?api_key=${process.env.APIKEY}`)
         .then(res =>{
           console.log(res)
           return {movie: res}

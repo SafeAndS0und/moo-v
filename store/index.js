@@ -1,6 +1,7 @@
 export const state = () => {
   return {
-    onWelcomeScreen: true
+    onWelcomeScreen: true,
+    showType: ''
   }
 
 }
@@ -8,6 +9,9 @@ export const state = () => {
 export const mutations = {
   turnOffWelcoming(state) {
     state.onWelcomeScreen = false
+  },
+  changeShowType(state, payload) {
+    state.showType = payload
   }
 }
 
