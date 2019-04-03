@@ -74,7 +74,6 @@
       cursor: pointer;
 
       &:hover{
-        background-color: #3177e8;
         opacity: 1;
       }
     }
@@ -111,7 +110,7 @@
         display: grid;
 
         h1 {
-          margin-top: 10vh;
+          margin-top: 6vh;
           font-size: 6em;
           text-align: center;
           line-height: 80px;

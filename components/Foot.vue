@@ -27,7 +27,7 @@
   footer {
     margin-top: 100px;
     width: 100%;
-    background-color: #0e0e0f;
+    background-color: transparent;
     height: 80px;
     position: relative;
 

@@ -71,8 +71,8 @@
     }
 
     .top {
-      width: 85%;
-      margin-top: 25px;
+      width: 100%;
+      padding: 20px 50px;
 
     }
 

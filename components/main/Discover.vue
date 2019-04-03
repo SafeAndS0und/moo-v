@@ -13,8 +13,12 @@
       </div>
     </div>
 
-    <div class="carousel">
-      <article v-for="movie of fewMovies(carouselPos.begin, carouselPos.until)" @click="showMovie(movie)">
+    <div class="progress" :style="{width: progressBarWidth + '%'}">
+    </div>
+
+    <div class="carousel" :class="{carouselEnd: cl_carouselNext}">
+      <article v-for="movie of fewMovies(carouselPos.begin, carouselPos.until)" class="list-item"
+               :key="movie.id" @click="showMovie(movie)">
 
         <div class="info">
           <h3>{{movie.title || movie.name}}</h3>
@@ -50,6 +54,16 @@
           begin: 0,
           until: 3
         },
+
+        cl_carouselNext: false,
+      }
+    },
+    computed:{
+      progressBarWidth(){
+        const length = this.movies.length
+        const until = this.carouselPos.until
+        const width = (until / length) * 100
+        return width > 100 ? 100 : width
       }
     },
     methods: {
@@ -64,12 +78,20 @@
 
       changeCarouselPos(backwards){
         if(!backwards){
-          this.carouselPos.begin += 3
-          this.carouselPos.until += 3
+          this.cl_carouselNext = true
+          setTimeout(() => {
+            this.cl_carouselNext = false
+            this.carouselPos.begin += 3
+            this.carouselPos.until += 3
+          }, 400)
         }
         else{
-          this.carouselPos.begin -= 3
-          this.carouselPos.until -= 3
+          this.cl_carouselNext = true
+          setTimeout(() => {
+            this.cl_carouselNext = false
+            this.carouselPos.begin -= 3
+            this.carouselPos.until -= 3
+          }, 400)
         }
       }
     }
@@ -88,43 +110,49 @@
       margin: 20px 0;
     }
 
-    .arrows{
+    .arrows {
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-gap: 25px;
       margin: 15px 0;
       color: grey;
 
-      .arrow-left{
+      .arrow-left {
         justify-self: end;
       }
 
-      .arrow-right{
+      .arrow-right {
         justify-self: start;
       }
 
-      .arrow{
+      .arrow {
         padding: 15px;
         border-radius: 50%;
         display: grid;
         align-items: center;
         cursor: pointer;
-        transition: .3s;
+        transition: .2s;
 
-        &:hover{
-          background-color: #1c1d21;
+        &:hover {
+          background-color: #212023;
           color: #fdfdfd;
         }
       }
+    }
 
+    .progress{
+      height: 3px;
+      background-image: linear-gradient(to right, #43070f, #4b070f, #53080e, #5a090d, #8E0A10);
+      transition: .8s;
     }
 
     .carousel {
       width: 100%;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       grid-column-gap: 25px;
       grid-row-gap: 15px;
+      transition: .4s;
 
       article {
         display: grid;
@@ -137,15 +165,18 @@
         cursor: pointer;
         filter: grayscale(20%);
         padding: 15px;
-        background-color: #19191c;
+        background-color: #1a191e;
+        border-right: 7px solid #111114;
+        border-bottom: 5px solid #121215;
 
         &:hover {
-          background-color: #1d1d20;
-          opacity: 1;
-          transform: scale(1.2);
+          z-index: 4;
+          opacity: 0.8;
+          transform: scale(1.06);
           filter: grayscale(0);
           box-shadow: 10px 10px 12px 0 rgb(12, 12, 12);
-          z-index: 4;
+          border-right: 2px solid #0c0c0f;
+          border-bottom: 1px solid #0c0c0f;
         }
 
         .info {
@@ -164,10 +195,17 @@
           }
         }
         img {
-          max-width: 160px;
+          max-width: 180px;
         }
       }
     }
   }
+
+
+  .carouselEnd{
+    opacity: 0;
+    transform: scale(0.98);
+  }
+
 
 </style>
