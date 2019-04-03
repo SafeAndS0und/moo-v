@@ -5,14 +5,19 @@
       <Welcome v-if="showWelcomeScreen" @exit="displayContent" class="welcome"/>
     </transition>
 
+    <Top v-if="showContent" class="top"/>
+
     <transition name="fadeFast">
       <main v-if="showContent">
 
-        <Search class="search" for-what="movie"/>
-        <Search class="search" for-what="tv"/>
-
         <Discover class="discover" for-what="movie"/>
         <Discover class="discover" for-what="tv"/>
+
+        <div class="search-container">
+          <Search class="search" for-what="movie"/>
+          <Search class="search" for-what="tv"/>
+        </div>
+
       </main>
     </transition>
 
@@ -25,11 +30,12 @@
   import Search from '../components/main/Search.vue'
   import Discover from '../components/main/Discover.vue'
   import Foot from '../components/Foot'
+  import Top from '../components/Top'
 
   export default {
-    components: {Welcome, Search, Foot, Discover},
+    components: {Welcome, Search, Foot, Discover, Top},
     created(){
-      setTimeout(() => this.websiteLanuched = true, 500)
+      setTimeout(() => this.websiteLanuched = true, 750)
       if(!this.$store.state.onWelcomeScreen)
         this.showContent = true
     },
@@ -46,7 +52,7 @@
     },
     methods: {
       displayContent(){
-        setTimeout(() => this.showContent = true, 1000)
+        setTimeout(() => this.showContent = true, 2000)
       }
     }
 
@@ -64,16 +70,28 @@
       align-self: center;
     }
 
+    .top {
+      width: 85%;
+      margin-top: 25px;
+
+    }
+
     main {
       margin-top: 40px;
       width: 85%;
+
+      .search-container{
+        /*display: grid;*/
+        /*grid-template-columns: 1fr 1fr;*/
+        /*grid-gap: 30px;*/
+      }
     }
   }
 
   /* Transition */
 
   .fade-enter-active, .fade-leave-active {
-    transition: opacity 1s;
+    transition: opacity 2s;
   }
 
   .fade-enter, .fade-leave-to {
@@ -84,11 +102,11 @@
 
   .fadeFast-enter-active, .fadeFast-leave-active {
     transition-property: transform, opacity;
-    transition: .5s;
+    transition: .75s;
   }
 
   .fadeFast-enter, .fadeFast-leave-to {
     opacity: 0;
-    transform: scale(0.7);
+    transform: translateY(20px);
   }
 </style>

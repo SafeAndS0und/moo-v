@@ -4,8 +4,17 @@
 
     <h2>Trending {{forWhat === 'movie' ? "Movies" : "TV Series"}}</h2>
 
+    <div class="arrows">
+      <div class="arrow arrow-left" @click="changeCarouselPos(true)">
+        <v-icon name="arrow-left" scale="2"/>
+      </div>
+      <div class="arrow arrow-right" @click="changeCarouselPos(false)">
+        <v-icon name="arrow-right" scale="2"/>
+      </div>
+    </div>
+
     <div class="carousel">
-      <article v-for="movie of movies" @click="showMovie(movie)">
+      <article v-for="movie of fewMovies(carouselPos.begin, carouselPos.until)" @click="showMovie(movie)">
 
         <div class="info">
           <h3>{{movie.title || movie.name}}</h3>
@@ -35,14 +44,33 @@
     },
     data(){
       return {
-        movies: []
+        movies: [],
+
+        carouselPos: {
+          begin: 0,
+          until: 3
+        },
       }
     },
-    computed: {},
     methods: {
       showMovie(movie){
         this.$store.commit('changeShowType', movie.title ? 'movie' : 'tv')
         this.$router.push('/' + movie.id)
+      },
+
+      fewMovies(begin, until){
+        return this.movies.slice(begin, until)
+      },
+
+      changeCarouselPos(backwards){
+        if(!backwards){
+          this.carouselPos.begin += 3
+          this.carouselPos.until += 3
+        }
+        else{
+          this.carouselPos.begin -= 3
+          this.carouselPos.until -= 3
+        }
       }
     }
   }
@@ -58,6 +86,37 @@
 
     h2 {
       margin: 20px 0;
+    }
+
+    .arrows{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 25px;
+      margin: 15px 0;
+      color: grey;
+
+      .arrow-left{
+        justify-self: end;
+      }
+
+      .arrow-right{
+        justify-self: start;
+      }
+
+      .arrow{
+        padding: 15px;
+        border-radius: 50%;
+        display: grid;
+        align-items: center;
+        cursor: pointer;
+        transition: .3s;
+
+        &:hover{
+          background-color: #1c1d21;
+          color: #fdfdfd;
+        }
+      }
+
     }
 
     .carousel {
@@ -78,6 +137,16 @@
         cursor: pointer;
         filter: grayscale(20%);
         padding: 15px;
+        background-color: #19191c;
+
+        &:hover {
+          background-color: #1d1d20;
+          opacity: 1;
+          transform: scale(1.2);
+          filter: grayscale(0);
+          box-shadow: 10px 10px 12px 0 rgb(12, 12, 12);
+          z-index: 4;
+        }
 
         .info {
           min-width: 150px;
@@ -90,21 +159,12 @@
             margin-top: 8px;
           }
 
-          p{
+          p {
             font-size: .95em;
           }
         }
         img {
           max-width: 160px;
-        }
-
-        &:hover {
-          background-color: #19191c;
-          opacity: 1;
-          transform: scale(1.2);
-          filter: grayscale(0);
-          box-shadow: 10px 10px 12px 0 rgb(12, 12, 12);
-          z-index: 4;
         }
       }
     }

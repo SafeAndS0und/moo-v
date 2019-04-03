@@ -18,7 +18,7 @@
     computed: {
       tenMovies(){
         console.log(this.movies)
-        return this.movies.slice(0, 12)
+        return this.movies.slice(0, 8)
       }
     },
     methods: {
