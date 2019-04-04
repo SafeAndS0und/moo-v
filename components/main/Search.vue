@@ -60,7 +60,7 @@
     input {
       display: block;
       margin: 15px auto 30px auto;
-      width: 35%;
+      width: 30%;
     }
 
     .results {

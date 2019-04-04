@@ -2,7 +2,7 @@
 
   <section>
 
-    <h2>Trending {{forWhat === 'movie' ? "Movies" : "TV Series"}}</h2>
+    <h2 v-if="!genre">Trending {{forWhat === 'movie' ? "Movies" : "TV Series"}}</h2>
 
     <div class="arrows">
       <div class="arrow arrow-left" @click="changeCarouselPos(true)">
@@ -37,9 +37,10 @@
 <script>
   export default {
     name: "Discover",
-    props: ['forWhat'],
+    props: ['forWhat', 'genre'],
     created(){
-      this.$axios.$get(`https://api.themoviedb.org/3/discover/${this.forWhat}?api_key=${process.env.APIKEY}&sort_by=popularity.desc`)
+      this.$axios.$get(
+        `https://api.themoviedb.org/3/discover/${this.forWhat}?api_key=${process.env.APIKEY}&sort_by=popularity.desc${this.withGenre}`)
         .then(res =>{
           console.log(res)
           this.movies = res.results
@@ -63,7 +64,12 @@
         const length = this.movies.length
         const until = this.carouselPos.until
         const width = (until / length) * 100
+
         return width > 100 ? 100 : width
+      },
+      withGenre(){
+        console.log(this.genre)
+        return this.genre ? `&with_genres=${this.genre}` : ''
       }
     },
     methods: {
@@ -196,6 +202,7 @@
         }
         img {
           max-width: 180px;
+          box-shadow: 5px 4px 8px 0 rgb(3, 3, 3);
         }
       }
     }

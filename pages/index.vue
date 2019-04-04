@@ -10,6 +10,8 @@
     <transition name="fadeFast">
       <main v-if="showContent">
 
+        <ByGenre class="by-genre"/>
+
         <Discover class="discover" for-what="movie"/>
         <Discover class="discover" for-what="tv"/>
 
@@ -31,11 +33,12 @@
   import Discover from '../components/main/Discover.vue'
   import Foot from '../components/Foot'
   import Top from '../components/Top'
+  import ByGenre from '../components/main/ByGenre.vue'
 
   export default {
-    components: {Welcome, Search, Foot, Discover, Top},
+    components: {Welcome, Search, Foot, Discover, Top, ByGenre},
     created(){
-      setTimeout(() => this.websiteLanuched = true, 750)
+      setTimeout(() => this.websiteLanuched = true, 1000)
       if(!this.$store.state.onWelcomeScreen)
         this.showContent = true
     },
@@ -102,11 +105,10 @@
 
   .fadeFast-enter-active, .fadeFast-leave-active {
     transition-property: transform, opacity;
-    transition: .75s;
+    transition: 1s;
   }
 
   .fadeFast-enter, .fadeFast-leave-to {
     opacity: 0;
-    transform: translateY(20px);
   }
 </style>
