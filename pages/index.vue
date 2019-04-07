@@ -10,10 +10,10 @@
     <transition name="fadeFast">
       <main v-if="showContent">
 
-        <ByGenre class="by-genre"/>
-
         <Discover class="discover" for-what="movie"/>
         <Discover class="discover" for-what="tv"/>
+
+        <ByGenre class="by-genre"/>
 
         <div class="search-container">
           <Search class="search" for-what="movie"/>
@@ -82,12 +82,12 @@
     main {
       margin-top: 40px;
       width: 85%;
+    }
 
-      .search-container{
-        /*display: grid;*/
-        /*grid-template-columns: 1fr 1fr;*/
-        /*grid-gap: 30px;*/
-      }
+    .by-genre{
+      margin-top: 30px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid #2a2a2a;
     }
   }
 

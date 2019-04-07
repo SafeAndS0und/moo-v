@@ -1,7 +1,7 @@
 <template>
 
   <section>
-    <h2>See trending movies in a specific genre</h2>
+    <h2>See Trending Movies in a Specific Genre</h2>
 
     <div class="genres">
 
@@ -27,7 +27,6 @@
     created(){
       this.$axios.$get(`https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.APIKEY}&language=en-US`)
         .then(res =>{
-
           this.genres = res.genres
         })
         .catch(err => console.error(err))
@@ -42,9 +41,8 @@
     },
     methods: {
       switchGenre(id){
-        console.log('switching genre', id)
         this.genreChosen = false
-        setTimeout(() => this.genreChosen = true, 1)
+        setTimeout(() => this.genreChosen = true, 300) // activating the transition
         this.genreId = id
 
         this.activeId = id
@@ -57,6 +55,7 @@
 <style scoped lang="scss">
 
   section {
+
     h2 {
       margin-bottom: 15px;
     }
@@ -98,9 +97,7 @@
     }
 
     .discover {
-
-      transform: scale(0.95);
-
+      border: none;
     }
   }
 
@@ -109,7 +106,7 @@
 
   /* Transitions */
   .fade-enter-active, .fade-leave-active {
-    transition: opacity 1.5s;
+    transition: opacity .5s;
   }
   .fade-enter, .fade-leave-to{
     opacity: 0;

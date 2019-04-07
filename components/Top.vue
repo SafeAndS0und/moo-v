@@ -23,12 +23,9 @@
 <style scoped lang="scss">
 
   header {
-    text-align: center;
-    background-color: #0c0c0f;
-    -webkit-box-shadow: 7px 7px 5px 0px rgba(0,0,0,0.75);
-    -moz-box-shadow: 7px 7px 5px 0px rgba(0,0,0,0.75);
-    box-shadow: 7px 7px 5px 0px rgba(0,0,0,0.75);
     position: relative;
+    background-color: #0f0f12;
+    box-shadow: 0 4px 4px 0 rgba(10, 10, 10, 0.75);
 
     .logo{
       width: 60px;
@@ -39,11 +36,12 @@
 
 
     h1 {
-      font-size: 2.5em;
+      color: #9a141a;
+      font-size: 2.3em;
     }
     p {
-      font-size: .9em;
-      color: #908a91;
+      font-size: .92em;
+      color: #696c70;
     }
   }
 

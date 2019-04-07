@@ -17,7 +17,11 @@
     </div>
 
     <div class="carousel" :class="{carouselEnd: cl_carouselNext}">
-      <article v-for="movie of fewMovies(carouselPos.begin, carouselPos.until)" class="list-item"
+      <article v-for="movie of fewMovies(carouselPos.begin, carouselPos.until)"
+               @mouseover="setBgImg(movie.backdrop_path, movie.id)"
+               @mouseout="unsetBgImg"
+               :style="{backgroundImage: movie.id === hoverId ? bgImg : ''}"
+               class="list-item"
                :key="movie.id" @click="showMovie(movie)">
 
         <div class="info">
@@ -26,6 +30,8 @@
         </div>
 
         <img :src='"https://image.tmdb.org/t/p/w200/" + movie.poster_path' alt="Poster">
+
+        <div class="dim"></div>
 
       </article>
     </div>
@@ -57,6 +63,8 @@
         },
 
         cl_carouselNext: false,
+        bgImg: null,
+        hoverId: null
       }
     },
     computed:{
@@ -68,7 +76,7 @@
         return width > 100 ? 100 : width
       },
       withGenre(){
-        console.log(this.genre)
+        this.movies = []
         return this.genre ? `&with_genres=${this.genre}` : ''
       }
     },
@@ -80,6 +88,15 @@
 
       fewMovies(begin, until){
         return this.movies.slice(begin, until)
+      },
+
+      setBgImg(path, id){
+        this.hoverId = id
+        this.bgImg = 'url("https://image.tmdb.org/t/p/original' + path + '")'
+      },
+      unsetBgImg(){
+        this.hoverId = ''
+        this.bgImg = ''
       },
 
       changeCarouselPos(backwards){
@@ -166,7 +183,7 @@
         grid-gap: 8px;
         justify-self: center;
         box-shadow: 6px 6px 10px 0 rgb(0, 0, 0);
-        transition: .3s;
+        transition: .5s;
         opacity: 0.6;
         cursor: pointer;
         filter: grayscale(20%);
@@ -175,21 +192,47 @@
         border-right: 7px solid #111114;
         border-bottom: 5px solid #121215;
 
+        background-position: center;
+        background-size: cover;
+        position: relative;
+
+        .dim{
+          position: absolute;
+          display: block;
+          width: 100%;
+          height: 100%;
+          background-image: linear-gradient(to top, #000000, #070707, #0d0d0d, #121212, #161616);
+          z-index: 1;
+          opacity: 0;
+        }
+
         &:hover {
           z-index: 4;
-          opacity: 0.8;
-          transform: scale(1.06);
+          opacity: 0.85;
+          transform: scale(1.16);
           filter: grayscale(0);
-          box-shadow: 10px 10px 12px 0 rgb(12, 12, 12);
+          box-shadow: 12px 12px 12px 0 rgb(12, 12, 12);
           border-right: 2px solid #0c0c0f;
           border-bottom: 1px solid #0c0c0f;
+
+          h1{
+            color: white;
+          }
+          p{
+            color: #bfbfbf;
+          }
+
+          .dim{
+            opacity: 0.88;
+          }
         }
 
         .info {
           min-width: 150px;
+          z-index: 3;
 
           h3 {
-            font-size: 1.1em;
+            font-size: 1.2em;
             font-weight: 300;
             margin-bottom: 10px;
             text-align: center;
@@ -197,10 +240,12 @@
           }
 
           p {
-            font-size: .95em;
+            font-size: .92em;
+            color: #9c9c9c;
           }
         }
         img {
+          z-index: 3;
           max-width: 180px;
           box-shadow: 5px 4px 8px 0 rgb(3, 3, 3);
         }
@@ -211,7 +256,6 @@
 
   .carouselEnd{
     opacity: 0;
-    transform: scale(0.98);
   }
 
 
