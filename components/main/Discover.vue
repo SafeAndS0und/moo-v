@@ -18,8 +18,8 @@
 
     <div class="carousel" :class="{carouselEnd: cl_carouselNext}">
       <article v-for="movie of fewMovies(carouselPos.begin, carouselPos.until)"
-               @mouseover="setBgImg(movie.backdrop_path, movie.id)"
-               @mouseout="unsetBgImg"
+               @mouseenter="setBgImg(movie.backdrop_path, movie.id, $event)"
+               @mouseleave="unsetBgImg"
                :style="{backgroundImage: movie.id === hoverId ? bgImg : ''}"
                class="list-item"
                :key="movie.id" @click="showMovie(movie)">
@@ -90,11 +90,27 @@
         return this.movies.slice(begin, until)
       },
 
-      setBgImg(path, id){
+      setBgImg(path, id, e){
         this.hoverId = id
-        this.bgImg = 'url("https://image.tmdb.org/t/p/original' + path + '")'
+        const img = new Image()
+        img.src =  'https://image.tmdb.org/t/p/original' + path
+
+        img.onload = () => {
+          this.bgImg = 'url("' + img.src + '")'
+
+          setTimeout(() =>  {
+            e.target.style.padding = '15px 60px'
+            e.target.style.transform = 'scale(1.1)'
+          }, 150)
+
+        }
+
       },
-      unsetBgImg(){
+      unsetBgImg(e){
+        setTimeout(() =>  {
+          e.target.style.padding = '15px'
+          e.target.style.transform = 'scale(1)'
+        }, 150)
         this.hoverId = ''
         this.bgImg = ''
       },
@@ -183,10 +199,9 @@
         grid-gap: 8px;
         justify-self: center;
         box-shadow: 6px 6px 10px 0 rgb(0, 0, 0);
-        transition: .5s;
+        transition: .7s;
         opacity: 0.6;
         cursor: pointer;
-        filter: grayscale(20%);
         padding: 15px;
         background-color: #1a191e;
         border-right: 7px solid #111114;
@@ -209,11 +224,10 @@
         &:hover {
           z-index: 4;
           opacity: 0.85;
-          transform: scale(1.16);
-          filter: grayscale(0);
           box-shadow: 12px 12px 12px 0 rgb(12, 12, 12);
           border-right: 2px solid #0c0c0f;
           border-bottom: 1px solid #0c0c0f;
+          grid-gap: 16px;
 
           h1{
             color: white;

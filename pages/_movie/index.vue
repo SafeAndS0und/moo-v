@@ -37,14 +37,16 @@
       return context.app.$axios.$get(
         `https://api.themoviedb.org/3/${context.store.state.showType}/${context.params.movie}?api_key=${process.env.APIKEY}`)
         .then(res =>{
-          console.log(res)
           return {movie: res}
         })
-        .catch(err => console.error(err))
+        .catch(err => {
+          console.error(err)
+          context.redirect('/')
+        })
     },
     computed: {
       imgLink(){
-        return 'url("https://image.tmdb.org/t/p/original' + this.movie.backdrop_path + '")'
+          return 'url("https://image.tmdb.org/t/p/original' + this.movie.backdrop_path + '")'
       }
 
     }
