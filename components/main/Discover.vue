@@ -2,21 +2,27 @@
 
   <section>
 
-    <h2 v-if="!genre">Trending {{forWhat === 'movie' ? "Movies" : "TV Series"}}</h2>
+    <transition name="fade">
+      <h2 v-if="!genre && moviesLoaded">Trending {{forWhat === 'movie' ? "Movies" : "TV Series"}}</h2>
+    </transition>
 
-    <div class="arrows">
-      <div class="arrow arrow-left" @click="changeCarouselPos(true)">
-        <v-icon name="arrow-left" scale="2"/>
+    <transition name="fade">
+      <div class="arrows" v-if="moviesLoaded">
+        <div class="arrow arrow-left" @click="changeCarouselPos(true)">
+          <v-icon name="arrow-left" scale="2"/>
+        </div>
+        <div class="arrow arrow-right" @click="changeCarouselPos(false)">
+          <v-icon name="arrow-right" scale="2"/>
+        </div>
       </div>
-      <div class="arrow arrow-right" @click="changeCarouselPos(false)">
-        <v-icon name="arrow-right" scale="2"/>
+    </transition>
+
+    <transition name="fade">
+      <div class="progress" v-if="moviesLoaded" :style="{width: progressBarWidth + '%'}">
       </div>
-    </div>
+    </transition>
 
-    <div class="progress" :style="{width: progressBarWidth + '%'}">
-    </div>
-
-    <div class="carousel" :class="{carouselEnd: cl_carouselNext}">
+    <div class="carousel" v-if="moviesLoaded" :class="{carouselEnd: cl_carouselNext}">
       <article v-for="movie of fewMovies(carouselPos.begin, carouselPos.until)"
                @mouseenter="setBgImg(movie.backdrop_path, movie.id, $event)"
                @mouseleave="unsetBgImg"
@@ -32,6 +38,7 @@
         <img :src='"https://image.tmdb.org/t/p/w200/" + movie.poster_path' alt="Poster">
 
         <div class="dim"></div>
+        <div class="dim-left"></div>
 
       </article>
     </div>
@@ -48,8 +55,9 @@
       this.$axios.$get(
         `https://api.themoviedb.org/3/discover/${this.forWhat}?api_key=${process.env.APIKEY}&sort_by=popularity.desc${this.withGenre}`)
         .then(res =>{
-          console.log(res)
+          this.moviesLoaded = true
           this.movies = res.results
+          this.$emit('moviesLoaded')
         })
         .catch(err => console.error(err))
     },
@@ -64,10 +72,12 @@
 
         cl_carouselNext: false,
         bgImg: null,
-        hoverId: null
+        hoverId: null,
+
+        moviesLoaded: false
       }
     },
-    computed:{
+    computed: {
       progressBarWidth(){
         const length = this.movies.length
         const until = this.carouselPos.until
@@ -93,12 +103,12 @@
       setBgImg(path, id, e){
         this.hoverId = id
         const img = new Image()
-        img.src =  'https://image.tmdb.org/t/p/original' + path
+        img.src = 'https://image.tmdb.org/t/p/original' + path
 
-        img.onload = () => {
+        img.onload = () =>{
           this.bgImg = 'url("' + img.src + '")'
 
-          setTimeout(() =>  {
+          setTimeout(() =>{
             e.target.style.padding = '15px 60px'
             e.target.style.transform = 'scale(1.1)'
           }, 150)
@@ -107,7 +117,7 @@
 
       },
       unsetBgImg(e){
-        setTimeout(() =>  {
+        setTimeout(() =>{
           e.target.style.padding = '15px'
           e.target.style.transform = 'scale(1)'
         }, 150)
@@ -118,15 +128,15 @@
       changeCarouselPos(backwards){
         if(!backwards){
           this.cl_carouselNext = true
-          setTimeout(() => {
+          setTimeout(() =>{
             this.cl_carouselNext = false
             this.carouselPos.begin += 3
             this.carouselPos.until += 3
-          }, 400)
+          },  400)
         }
         else{
           this.cl_carouselNext = true
-          setTimeout(() => {
+          setTimeout(() =>{
             this.cl_carouselNext = false
             this.carouselPos.begin -= 3
             this.carouselPos.until -= 3
@@ -179,7 +189,7 @@
       }
     }
 
-    .progress{
+    .progress {
       height: 3px;
       background-image: linear-gradient(to right, #43070f, #4b070f, #53080e, #5a090d, #8E0A10);
       transition: .8s;
@@ -199,7 +209,7 @@
         grid-gap: 8px;
         justify-self: center;
         box-shadow: 6px 6px 10px 0 rgb(0, 0, 0);
-        transition: .7s;
+        transition: .4s;
         opacity: 0.6;
         cursor: pointer;
         padding: 15px;
@@ -211,7 +221,7 @@
         background-size: cover;
         position: relative;
 
-        .dim{
+        .dim {
           position: absolute;
           display: block;
           width: 100%;
@@ -221,23 +231,38 @@
           opacity: 0;
         }
 
+
+        .dim-left {
+          position: absolute;
+          display: block;
+          width: 100%;
+          height: 100%;
+          background-image: linear-gradient(to right, #000000, transparent);
+          z-index: 1;
+          opacity: 0;
+        }
+
         &:hover {
           z-index: 4;
-          opacity: 0.85;
+          opacity: 0.95;
           box-shadow: 12px 12px 12px 0 rgb(12, 12, 12);
           border-right: 2px solid #0c0c0f;
           border-bottom: 1px solid #0c0c0f;
           grid-gap: 16px;
 
-          h1{
+          h1 {
             color: white;
           }
-          p{
-            color: #bfbfbf;
+          p {
+            color: #dadada;
           }
 
-          .dim{
-            opacity: 0.88;
+          .dim {
+            opacity: 0.60;
+          }
+
+          .dim-left {
+            opacity: 0.98;
           }
         }
 
@@ -267,10 +292,16 @@
     }
   }
 
-
-  .carouselEnd{
+  .carouselEnd {
     opacity: 0;
   }
 
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity 2s;
+  }
+
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+  }
 
 </style>

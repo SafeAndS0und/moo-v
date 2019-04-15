@@ -8,10 +8,10 @@
     <Top v-if="showContent" class="top"/>
 
     <transition name="fadeFast">
-      <main v-if="showContent">
+      <main v-show="showContent">
 
         <Discover class="discover" for-what="movie"/>
-        <Discover class="discover" for-what="tv"/>
+        <Discover class="discover" @movies-loaded="animate" for-what="tv"/>
 
         <ByGenre class="by-genre"/>
 
@@ -38,7 +38,7 @@
   export default {
     components: {Welcome, Search, Foot, Discover, Top, ByGenre},
     created(){
-      setTimeout(() => this.websiteLanuched = true, 1000)
+      setTimeout(() => this.websiteLanuched = true, 800)
       if(!this.$store.state.onWelcomeScreen)
         this.showContent = true
     },
@@ -54,8 +54,11 @@
       },
     },
     methods: {
+      animate(){
+        this.showContent = true
+      },
       displayContent(){
-        setTimeout(() => this.showContent = true, 2000)
+        setTimeout(() => this.showContent = true, 1500)
       }
     }
 
@@ -67,6 +70,7 @@
     height: 100vh;
     display: grid;
     justify-items: center;
+    transition: 1s;
 
     .welcome {
       width: 75%;
@@ -94,7 +98,7 @@
   /* Transition */
 
   .fade-enter-active, .fade-leave-active {
-    transition: opacity 2s;
+    transition: opacity 1.5s;
   }
 
   .fade-enter, .fade-leave-to {
@@ -105,7 +109,7 @@
 
   .fadeFast-enter-active, .fadeFast-leave-active {
     transition-property: transform, opacity;
-    transition: 1s;
+    transition: 1.2s;
   }
 
   .fadeFast-enter, .fadeFast-leave-to {
