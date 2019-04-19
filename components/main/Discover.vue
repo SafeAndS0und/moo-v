@@ -28,7 +28,7 @@
                @mouseleave="unsetBgImg"
                :style="{backgroundImage: movie.id === hoverId ? bgImg : ''}"
                class="list-item"
-               :key="movie.id" @click="showMovie(movie)">
+               :key="movie.id" @click="showMovie(movie, $event)">
 
         <div class="info">
           <h3>{{movie.title || movie.name}}</h3>
@@ -73,6 +73,7 @@
         cl_carouselNext: false,
         bgImg: null,
         hoverId: null,
+        hoverTarget: null,
 
         moviesLoaded: false
       }
@@ -91,7 +92,8 @@
       }
     },
     methods: {
-      showMovie(movie){
+      showMovie(movie, e){
+        this.unsetBgImg(e, true)
         this.$store.commit('changeShowType', movie.title ? 'movie' : 'tv')
         this.$router.push('/' + movie.id)
       },
@@ -102,22 +104,31 @@
 
       setBgImg(path, id, e){
         this.hoverId = id
+        this.hoverTarget = e.target
         const img = new Image()
         img.src = 'https://image.tmdb.org/t/p/original' + path
 
         img.onload = () =>{
           this.bgImg = 'url("' + img.src + '")'
 
-          setTimeout(() => e.target.style.transform = 'scale(1.1)', 150)
-          setTimeout(() => e.target.style.padding = '15px 60px', 500)
+          setTimeout(() => e.target.style.transform = 'scale(1.1)', 100)
+          setTimeout(() => e.target.style.padding = '15px 60px', 400)
         }
 
       },
-      unsetBgImg(e){
-        setTimeout(() =>{
-          e.target.style.transform = 'scale(1)'
-          e.target.style.padding = '15px'
-        }, 500)
+      unsetBgImg(e, now){
+
+        if(now){
+          // clicking target is not the same as hover
+          this.hoverTarget.style.transform = 'scale(1)'
+          this.hoverTarget.style.padding = '15px'
+        } else{
+          setTimeout(() =>{
+            e.target.style.transform = 'scale(1)'
+            e.target.style.padding = '15px'
+          }, 500)
+        }
+
         this.hoverId = ''
         this.bgImg = ''
       },
