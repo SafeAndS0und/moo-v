@@ -52,6 +52,12 @@
     name: "Discover",
     props: ['forWhat', 'genre'],
     created(){
+      this.vw = document.documentElement.clientWidth
+
+      window.addEventListener('resize', () => {
+        this.vw = document.documentElement.clientWidth
+      })
+
       this.$axios.$get(
         `https://api.themoviedb.org/3/discover/${this.forWhat}?api_key=${process.env.APIKEY}&sort_by=popularity.desc${this.withGenre}`)
         .then(res =>{
@@ -75,7 +81,9 @@
         hoverId: null,
         hoverTarget: null,
 
-        moviesLoaded: false
+        moviesLoaded: false,
+
+        vw: null
       }
     },
     computed: {
@@ -103,6 +111,9 @@
       },
 
       setBgImg(path, id, e){
+        if(this.vw < 800 )
+          return
+
         this.hoverId = id
         this.hoverTarget = e.target
         const img = new Image()
@@ -112,7 +123,7 @@
           this.bgImg = 'url("' + img.src + '")'
 
           setTimeout(() => e.target.style.transform = 'scale(1.12)', 100)
-          setTimeout(() => {
+          setTimeout(() =>{
             e.target.style.padding = '15px 50px'
             e.target.style.gridGap = '40px'
           }, 400)
@@ -120,6 +131,9 @@
 
       },
       unsetBgImg(e, now){
+
+        if(this.vw < 800 )
+          return
 
         if(now){
           // clicking target is not the same as hover
@@ -237,7 +251,7 @@
         background-color: #1a191e;
         border-right: 7px solid #111114;
         border-bottom: 5px solid #121215;
-        max-width: 600px;
+        max-width: 700px;
 
         background-position: center;
         background-size: cover;
@@ -263,8 +277,8 @@
           opacity: 0;
         }
 
-        &:hover {
-          @media (min-width: 900px) {
+        @media (min-width: 800px) {
+          &:hover {
             z-index: 4;
             opacity: 0.95;
             box-shadow: 12px 12px 12px 0 rgb(12, 12, 12);
@@ -288,9 +302,9 @@
             .dim-left {
               opacity: 0.98;
             }
+
           }
         }
-
         .info {
           min-width: 130px;
           z-index: 3;
@@ -317,6 +331,18 @@
           max-width: 180px;
           box-shadow: 5px 4px 8px 0 rgb(3, 3, 3);
           transition: 0.2s;
+        }
+      }
+
+      @media (max-width: 800px) {
+        article {
+
+          img {
+            width: 100%;
+            grid-row: 2;
+            display: block;
+            margin: 15px auto;
+          }
         }
       }
     }
