@@ -79,7 +79,7 @@
 
     .top {
       width: 100%;
-      padding: 20px 50px;
+      padding: 6px 50px;
 
     }
 

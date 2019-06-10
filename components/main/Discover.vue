@@ -32,7 +32,7 @@
 
         <div class="info">
           <h3>{{movie.title || movie.name}}</h3>
-          <p>{{movie.overview.substring(0, 80)}}...</p>
+          <p>{{movie.overview.substring(0, 120)}}...</p>
         </div>
 
         <img :src='"https://image.tmdb.org/t/p/w200/" + movie.poster_path' alt="Poster">
@@ -111,8 +111,11 @@
         img.onload = () =>{
           this.bgImg = 'url("' + img.src + '")'
 
-          setTimeout(() => e.target.style.transform = 'scale(1.1)', 100)
-          setTimeout(() => e.target.style.padding = '15px 60px', 400)
+          setTimeout(() => e.target.style.transform = 'scale(1.12)', 100)
+          setTimeout(() => {
+            e.target.style.padding = '15px 50px'
+            e.target.style.gridGap = '40px'
+          }, 400)
         }
 
       },
@@ -122,10 +125,13 @@
           // clicking target is not the same as hover
           this.hoverTarget.style.transform = 'scale(1)'
           this.hoverTarget.style.padding = '15px'
-        } else{
+
+        }
+        else{
           setTimeout(() =>{
             e.target.style.transform = 'scale(1)'
             e.target.style.padding = '15px'
+            e.target.style.gridGap = '8px'
           }, 500)
         }
 
@@ -258,31 +264,38 @@
         }
 
         &:hover {
-          z-index: 4;
-          opacity: 0.95;
-          box-shadow: 12px 12px 12px 0 rgb(12, 12, 12);
-          border-right: 2px solid #0c0c0f;
-          border-bottom: 1px solid #0c0c0f;
+          @media (min-width: 900px) {
+            z-index: 4;
+            opacity: 0.95;
+            box-shadow: 12px 12px 12px 0 rgb(12, 12, 12);
+            border-right: 2px solid #0c0c0f;
+            border-bottom: 1px solid #0c0c0f;
 
-          h1 {
-            color: white;
-          }
-          p {
-            color: #dadada;
-          }
+            .info {
+              h3 {
+                color: white;
+                font-size: 1.2em;
+              }
+              p {
+                color: #dadada;
+              }
+            }
 
-          .dim {
-            opacity: 0.60;
-          }
+            .dim {
+              opacity: 0.60;
+            }
 
-          .dim-left {
-            opacity: 0.98;
+            .dim-left {
+              opacity: 0.98;
+            }
           }
         }
 
         .info {
           min-width: 130px;
           z-index: 3;
+          transition: all .2s;
+          width: 100%;
 
           h3 {
             font-size: 1.2em;
@@ -290,17 +303,20 @@
             margin-bottom: 10px;
             text-align: center;
             margin-top: 8px;
+            transition: 1s;
           }
 
           p {
             font-size: .92em;
             color: #9c9c9c;
+            transition: 1s;
           }
         }
         img {
           z-index: 3;
           max-width: 180px;
           box-shadow: 5px 4px 8px 0 rgb(3, 3, 3);
+          transition: 0.2s;
         }
       }
     }
