@@ -1,5 +1,6 @@
 # moo-v
-
+Moo is what cow does. V stands for Vue. Combined it gives us a "movie" which is, in fact, the subject of this project.
+It uses an external API to fetch some details about a movie and displays them nicely to the user. That's about it.
 > 
 
 ## Build Setup
@@ -19,4 +20,3 @@ $ npm start
 $ npm run generate
 ```
 
-For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
